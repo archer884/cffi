@@ -9,9 +9,9 @@ extern {
     fn c_is_prime(n: c_ulonglong) -> c_int;
 }
 
-pub fn foreign_is_prime(n: u64) -> bool {
+pub fn foreign_is_prime(n: u64) -> c_int {
     unsafe {
-        c_is_prime(n) != 0
+        c_is_prime(n)
     }
 }
 
@@ -43,14 +43,14 @@ mod tests {
 
     #[bench]
     fn bench_native(b: &mut test::Bencher) {
-        b.iter(|| for n in 1000000..10000000 {
+        b.iter(|| for n in 1000000..1001000 {
             test::black_box(is_prime(n));
         })
     }
 
     #[bench]
     fn bench_foreign(b: &mut test::Bencher) {
-        b.iter(|| for n in 1000000..10000000 {
+        b.iter(|| for n in 1000000..1001000 {
             test::black_box(foreign_is_prime(n));
         })
     }
